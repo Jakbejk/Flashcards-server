@@ -25,6 +25,7 @@ public class SetController {
         return setService.get(new SetGetDtoIn(id), token);
     }
 
+    @PostMapping("/transfer")
     public void transfer(@RequestBody SetTransferDtoIn dtoIn, @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
         setService.transfer(dtoIn, token);
     }

@@ -55,6 +55,7 @@ public class SetService {
         dtoInValidator.validateDtoIn(dtoIn);
         // HDS 3.0 - find current user
         User user = userDao.findUserByUuid(authUser.getUuid());
+        // HDS 4.0 - find searched set
         Set set = setDao.findById(dtoIn.getId()).orElse(null);
         if (set == null) {
             // ERR 3.0 - set with given ID was not found
@@ -63,7 +64,7 @@ public class SetService {
             // ERR 4.0 - set is not accessible to current user
             throw new SetErrorRegistry.EnoughPermissionsForSet();
         } else {
-            // HDS 4.0 - return response
+            // HDS 5.0 - return response
             return new SetGetDtoOut(set);
         }
     }
