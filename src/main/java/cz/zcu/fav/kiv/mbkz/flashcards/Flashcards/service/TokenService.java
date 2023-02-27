@@ -10,14 +10,12 @@ import cz.zcu.fav.kiv.mbkz.flashcards.Flashcards.dao.UserDao;
 import cz.zcu.fav.kiv.mbkz.flashcards.Flashcards.entity.User;
 import cz.zcu.fav.kiv.mbkz.flashcards.Flashcards.entity.shadow.UserShort;
 import cz.zcu.fav.kiv.mbkz.flashcards.Flashcards.exception.AuthenticationException;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ResourceUtils;
 
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.InputStream;
 import java.security.KeyFactory;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
@@ -47,12 +45,14 @@ public final class TokenService {
      * @throws Exception If any problem occurs
      */
     private static RSAPrivateKey generatePrivateKey() throws Exception {
-        File file = ResourceUtils.getFile("classpath:"+TokenSignRegistry.PRIVATE_KEY_PATH);
-        byte[] keyBytes = Files.readAllBytes(file.toPath());
+        ClassPathResource resource = new ClassPathResource(TokenSignRegistry.PRIVATE_KEY_PATH);
 
-        PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(keyBytes);
-        KeyFactory kf = KeyFactory.getInstance(TokenSignRegistry.ALGORITHM);
-        return (RSAPrivateKey) kf.generatePrivate(spec);
+        try (InputStream fileInputStream = resource.getInputStream()) {
+            byte[] keyBytes = IOUtils.toByteArray(fileInputStream);
+            PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(keyBytes);
+            KeyFactory kf = KeyFactory.getInstance(TokenSignRegistry.ALGORITHM);
+            return (RSAPrivateKey) kf.generatePrivate(spec);
+        }
     }
 
     /**
@@ -62,11 +62,14 @@ public final class TokenService {
      * @throws Exception If any problem occurs
      */
     private static RSAPublicKey generatePublicKey() throws Exception {
-        File file = ResourceUtils.getFile("classpath:"+TokenSignRegistry.PUBLIC_KEY_PATH);
-        byte[] keyBytes = Files.readAllBytes(file.toPath());
-        X509EncodedKeySpec spec = new X509EncodedKeySpec(keyBytes);
-        KeyFactory kf = KeyFactory.getInstance(TokenSignRegistry.ALGORITHM);
-        return (RSAPublicKey) kf.generatePublic(spec);
+        ClassPathResource resource = new ClassPathResource(TokenSignRegistry.PUBLIC_KEY_PATH);
+
+        try (InputStream fileInputStream = resource.getInputStream()) {
+            byte[] keyBytes = IOUtils.toByteArray(fileInputStream);
+            X509EncodedKeySpec spec = new X509EncodedKeySpec(keyBytes);
+            KeyFactory kf = KeyFactory.getInstance(TokenSignRegistry.ALGORITHM);
+            return (RSAPublicKey) kf.generatePublic(spec);
+        }
     }
 
     private static String separateBearerPref(String token) {
