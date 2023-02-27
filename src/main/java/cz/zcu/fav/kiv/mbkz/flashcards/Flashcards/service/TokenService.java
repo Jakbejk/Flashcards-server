@@ -13,7 +13,9 @@ import cz.zcu.fav.kiv.mbkz.flashcards.Flashcards.exception.AuthenticationExcepti
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ResourceUtils;
 
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.KeyFactory;
@@ -45,8 +47,8 @@ public final class TokenService {
      * @throws Exception If any problem occurs
      */
     private static RSAPrivateKey generatePrivateKey() throws Exception {
-        ClassPathResource resource = new ClassPathResource(TokenSignRegistry.PRIVATE_KEY_PATH);
-        byte[] keyBytes = Files.readAllBytes(Paths.get(resource.getURI().getPath()));
+        File file = ResourceUtils.getFile("classpath:"+TokenSignRegistry.PRIVATE_KEY_PATH);
+        byte[] keyBytes = Files.readAllBytes(file.toPath());
 
         PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(keyBytes);
         KeyFactory kf = KeyFactory.getInstance(TokenSignRegistry.ALGORITHM);
@@ -60,8 +62,8 @@ public final class TokenService {
      * @throws Exception If any problem occurs
      */
     private static RSAPublicKey generatePublicKey() throws Exception {
-        ClassPathResource resource = new ClassPathResource(TokenSignRegistry.PUBLIC_KEY_PATH);
-        byte[] keyBytes = Files.readAllBytes(Paths.get(resource.getURI().getPath()));
+        File file = ResourceUtils.getFile("classpath:"+TokenSignRegistry.PUBLIC_KEY_PATH);
+        byte[] keyBytes = Files.readAllBytes(file.toPath());
         X509EncodedKeySpec spec = new X509EncodedKeySpec(keyBytes);
         KeyFactory kf = KeyFactory.getInstance(TokenSignRegistry.ALGORITHM);
         return (RSAPublicKey) kf.generatePublic(spec);
