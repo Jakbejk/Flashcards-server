@@ -1,11 +1,11 @@
 package cz.zcu.fav.kiv.mbkz.flashcards.Flashcards.controller;
 
-import com.google.common.net.HttpHeaders;
 import cz.zcu.fav.kiv.mbkz.flashcards.Flashcards.dto.set.*;
 import cz.zcu.fav.kiv.mbkz.flashcards.Flashcards.exception.AuthenticationException;
 import cz.zcu.fav.kiv.mbkz.flashcards.Flashcards.exception.ValidationException;
 import cz.zcu.fav.kiv.mbkz.flashcards.Flashcards.service.SetService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

@@ -15,12 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
-public class SetService {
-    private final SetDao setDao;
-    private final TokenService tokenService;
-    private final DtoInValidator dtoInValidator;
-    private final UserDao userDao;
+public record SetService(SetDao setDao, TokenService tokenService, DtoInValidator dtoInValidator, UserDao userDao) {
 
     public SetSaveDtoOut save(SetSaveDtoIn dtoIn, String token) throws AuthenticationException, ValidationException {
         // HDS 1.0 - verify token

@@ -1,0 +1,10 @@
+{
+  "realm": "Flashcards",
+  "auth-server-url": "https://keycloak.kubala-personal.cz/auth/",
+  "ssl-required": "external",
+  "resource": "flashcard",
+  "credentials": {
+    "secret": "5YY3ITiImhYuxjLk588WRKrjAIBbMsWz"
+  },
+  "confidential-port": 0
+}
