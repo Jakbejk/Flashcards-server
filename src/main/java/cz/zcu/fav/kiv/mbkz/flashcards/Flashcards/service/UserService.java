@@ -13,12 +13,10 @@ public record UserService(UserDao userDao, TokenService tokenService) {
         // HDS 1.0 - verify token
         // ERR 1.0 - token is invalid
         UserShort authUser = tokenService.verifyToken(token, false);
-        // ERR 2.0 - user uuid exists in database
-        if (userDao.existsByUuid(authUser.getUuid())) {
-            throw new AuthenticationException("User already exists");
-        }
         // HDS 2.0 - save user with given uuid
-        userDao.save(User.builder().uuid(authUser.getUuid()).build());
+        if (!userDao.existsByUuid(authUser.getUuid())) {
+            userDao.save(User.builder().uuid(authUser.getUuid()).build());
+        }
     }
 
 }
