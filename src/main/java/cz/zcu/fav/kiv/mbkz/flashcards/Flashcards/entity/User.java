@@ -24,15 +24,23 @@ public class User extends AbstractEntity {
 
     public void addSet(Set set) {
         if (set != null) {
-            this.getSetList().add(set);
-            set.getUserList().add(this);
+            if (this.getSetList() != null) {
+                this.getSetList().add(set);
+            }
+            if (set.getUserList() != null) {
+                set.getUserList().add(this);
+            }
         }
     }
 
     public void removeSet(Set set) {
         if (set != null) {
-            this.getSetList().remove(set);
-            set.getUserList().remove(this);
+            if (this.getSetList() != null) {
+                this.getSetList().remove(set);
+            }
+            if (set.getUserList() != null) {
+                set.getUserList().remove(this);
+            }
         }
     }
 
