@@ -11,7 +11,6 @@ import cz.zcu.fav.kiv.mbkz.flashcards.Flashcards.exception.AuthenticationExcepti
 import cz.zcu.fav.kiv.mbkz.flashcards.Flashcards.exception.SetErrorRegistry;
 import cz.zcu.fav.kiv.mbkz.flashcards.Flashcards.exception.UserErrorRegistry;
 import cz.zcu.fav.kiv.mbkz.flashcards.Flashcards.exception.ValidationException;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -55,7 +54,7 @@ public record SetService(SetDao setDao, TokenService tokenService, DtoInValidato
         if (set == null) {
             // ERR 3.0 - set with given ID was not found
             throw new SetErrorRegistry.SetNotFoundException();
-        } else if (!user.getSetList().contains(set)) {
+        } else if (user.getSetList() == null || !user.getSetList().contains(set)) {
             // ERR 4.0 - set is not accessible to current user
             throw new SetErrorRegistry.EnoughPermissionsForSet();
         } else {

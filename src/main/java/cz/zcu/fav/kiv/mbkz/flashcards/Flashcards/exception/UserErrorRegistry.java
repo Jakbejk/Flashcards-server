@@ -19,11 +19,6 @@ public final class UserErrorRegistry {
         }
 
         @Override
-        public HttpStatus getCode() {
-            return HttpStatus.INTERNAL_SERVER_ERROR;
-        }
-
-        @Override
         public int getApplicationCode() {
             return USER_NOT_FOUND_CODE;
         }

@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 
 public final class SetErrorRegistry {
 
+
     public static final String SET_NOT_FOUND_MESSAGE = "Set with given id was not found.";
     public static final String ENOUGH_PERMISSIONS_FOR_SET_MESSAGE = "Set found, but user has not privileges.";
     public static final int SET_NOT_FOUND_CODE = 101;
@@ -20,11 +21,6 @@ public final class SetErrorRegistry {
         }
 
         @Override
-        public HttpStatus getCode() {
-            return HttpStatus.INTERNAL_SERVER_ERROR;
-        }
-
-        @Override
         public int getApplicationCode() {
             return SET_NOT_FOUND_CODE;
         }
@@ -35,11 +31,6 @@ public final class SetErrorRegistry {
         @Override
         public String getMessage() {
             return ENOUGH_PERMISSIONS_FOR_SET_MESSAGE;
-        }
-
-        @Override
-        public HttpStatus getCode() {
-            return HttpStatus.INTERNAL_SERVER_ERROR;
         }
 
         @Override

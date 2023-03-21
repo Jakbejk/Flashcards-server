@@ -4,7 +4,11 @@ import org.springframework.http.HttpStatus;
 
 public abstract class AbstractException extends RuntimeException {
 
-    public abstract HttpStatus getCode();
+    protected static final int APPLICATION_RESPONSE_CODE = 460;
+
+    public HttpStatus getCode() {
+        return HttpStatus.resolve(APPLICATION_RESPONSE_CODE);
+    }
 
     public abstract int getApplicationCode();
 
