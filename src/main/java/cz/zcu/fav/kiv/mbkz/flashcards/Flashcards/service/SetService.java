@@ -6,16 +6,31 @@ import cz.zcu.fav.kiv.mbkz.flashcards.Flashcards.dao.UserDao;
 import cz.zcu.fav.kiv.mbkz.flashcards.Flashcards.dto.set.*;
 import cz.zcu.fav.kiv.mbkz.flashcards.Flashcards.entity.Set;
 import cz.zcu.fav.kiv.mbkz.flashcards.Flashcards.entity.User;
+import cz.zcu.fav.kiv.mbkz.flashcards.Flashcards.entity.shadow.SetShort;
 import cz.zcu.fav.kiv.mbkz.flashcards.Flashcards.entity.shadow.UserShort;
 import cz.zcu.fav.kiv.mbkz.flashcards.Flashcards.exception.AuthenticationException;
 import cz.zcu.fav.kiv.mbkz.flashcards.Flashcards.exception.SetErrorRegistry;
 import cz.zcu.fav.kiv.mbkz.flashcards.Flashcards.exception.UserErrorRegistry;
 import cz.zcu.fav.kiv.mbkz.flashcards.Flashcards.exception.ValidationException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
-public record SetService(SetDao setDao, TokenService tokenService, DtoInValidator dtoInValidator, UserDao userDao) {
+@RequiredArgsConstructor
+public class SetService {
 
+    private final SetDao setDao;
+
+    private final TokenService tokenService;
+
+    private final DtoInValidator dtoInValidator;
+
+    private final UserDao userDao;
+
+    @Transactional
     public SetSaveDtoOut save(SetSaveDtoIn dtoIn, String token) throws AuthenticationException, ValidationException {
         // HDS 1.0 - verify token
         // ERR 1.0 - token is invalid
@@ -63,6 +78,7 @@ public record SetService(SetDao setDao, TokenService tokenService, DtoInValidato
         }
     }
 
+    @Transactional
     public void transfer(SetTransferDtoIn dtoIn, String token) {
         // HDS 1.0 - verify token
         // ERR 1.0 - token is invalid
@@ -89,5 +105,15 @@ public record SetService(SetDao setDao, TokenService tokenService, DtoInValidato
         user.removeSet(set);
         user.addSet(set);
         userDao.save(user);
+    }
+
+    public SetListAllDtoOut listAllShort(String token) {
+        // HDS 1.0 - verify token
+        // ERR 1.0 - token is invalid
+        UserShort authUser = tokenService.verifyToken(token);
+        // HDS 2.0 - find all set short records for current user
+        List<SetShort> setShortList = userDao.findUserSetShortListByUuid(authUser.getUuid());
+        // HDS 3.0 - return response
+        return new SetListAllDtoOut(setShortList);
     }
 }

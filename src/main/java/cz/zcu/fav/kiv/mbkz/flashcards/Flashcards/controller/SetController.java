@@ -30,4 +30,9 @@ public class SetController {
         setService.transfer(dtoIn, token);
     }
 
+    @PostMapping("/listAllShort")
+    public SetListAllDtoOut listAllShort(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+        return setService.listAllShort(token);
+    }
+
 }
