@@ -4,6 +4,7 @@ import cz.zcu.fav.kiv.mbkz.flashcards.Flashcards.dao.UserDao;
 import cz.zcu.fav.kiv.mbkz.flashcards.Flashcards.entity.User;
 import cz.zcu.fav.kiv.mbkz.flashcards.Flashcards.entity.shadow.UserShort;
 import cz.zcu.fav.kiv.mbkz.flashcards.Flashcards.exception.AuthenticationException;
+import lombok.RequiredArgsConstructor;
 import org.keycloak.adapters.KeycloakDeployment;
 import org.keycloak.adapters.rotation.AdapterTokenVerifier;
 import org.keycloak.common.VerificationException;
@@ -11,7 +12,12 @@ import org.keycloak.representations.AccessToken;
 import org.springframework.stereotype.Service;
 
 @Service
-public record TokenService(UserDao userDao, KeycloakDeployment keycloakDeployment) {
+@RequiredArgsConstructor
+public class TokenService {
+
+    private final UserDao userDao;
+
+    private final KeycloakDeployment keycloakDeployment;
 
     private static final String BEARER_TOKEN_PREFIX = "Bearer ";
 
