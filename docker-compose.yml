@@ -1,0 +1,30 @@
+version: '3.7'
+services:
+  flashcards:
+    container_name: flashcards-app
+    image: jakbejk1/flashcards:latest
+    depends_on:
+      - maria_db
+    ports:
+      - "9091:9091"
+    environment:
+      SERVER_PORT: 9091
+      SPRING_DATASOURCE_URL: jdbc:mariadb://maria_db:3306/flashcards
+      SPRING_DATASOURCE_USERNAME: $DB_ADMIN_USERNAME
+      SPRING_DATASOURCE_PASSWORD: $DB_ADMIN_PASSWORD
+  maria_db:
+    container_name: flashcards-app-database
+    restart: always
+    image: mariadb:latest
+    ports:
+      - "3307:3306"
+    environment:
+      MARIADB_ROOT_PASSWORD: $DB_ADMIN_PASSWORD
+      MARIADB_DATABASE: flashcards
+      MARIADB_USER: $DB_ADMIN_USERNAME
+      MARIADB_PASSWORD: $DB_ADMIN_PASSWORD
+    volumes:
+      - maria_db:/var/lib/mysql
+volumes:
+  maria_db:
+
